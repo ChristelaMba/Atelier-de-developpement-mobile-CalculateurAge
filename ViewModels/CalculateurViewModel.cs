@@ -9,6 +9,9 @@ public class CalculateurViewModel : BaseViewModel
     private string _resultat = "";
     private bool _resultatVisible;
 
+    // Champ prive : la vraie donnee du message Majeur / Mineur.
+    private string _message = "";
+
     // Proprietes publiques : ce que le XAML voit.
     public string Nom
     {
@@ -38,6 +41,13 @@ public class CalculateurViewModel : BaseViewModel
         set => SetField(ref _resultatVisible, value);
     }
 
+    // Propriete publique : ce que le XAML voit pour le message.
+    public string Message
+    {
+        get => _message;
+        set => SetField(ref _message, value);
+    }
+
     // Liee a Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
@@ -57,6 +67,9 @@ public class CalculateurViewModel : BaseViewModel
             DateTime.Today.AddYears(-age)) age--;
 
         Resultat = $"{Nom}, vous avez {age} ans";
+
+        // Si l'age est 18 ou plus : Majeur, sinon : Mineur.
+        Message = age >= 18 ? "Majeur" : "Mineur";
         ResultatVisible = true;
     }
 }
