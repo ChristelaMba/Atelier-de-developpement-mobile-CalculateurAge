@@ -20,6 +20,10 @@
             <Label Text="{Binding Message}" FontSize="18"
                     IsVisible="{Binding ResultatVisible}"/>
 
+            <!-- Affiche les jours restants avant le prochain anniversaire. -->
+            <Label Text="{Binding JoursRestants}" FontSize="16"
+                    IsVisible="{Binding ResultatVisible}"/>
+
             <!-- Bouton qui remet tous les champs a zero. -->
             <Button Text="Effacer"
                     Command="{Binding EffacerCommand}"/>

@@ -12,6 +12,9 @@ public class CalculateurViewModel : BaseViewModel
     // Champ prive : la vraie donnee du message Majeur / Mineur.
     private string _message = "";
 
+    // Champ prive : la vraie donnee des jours restants.
+    private string _joursRestants = "";
+
     // Proprietes publiques : ce que le XAML voit.
     public string Nom
     {
@@ -48,6 +51,13 @@ public class CalculateurViewModel : BaseViewModel
         set => SetField(ref _message, value);
     }
 
+    // Propriete publique : ce que le XAML voit pour les jours restants.
+    public string JoursRestants
+    {
+        get => _joursRestants;
+        set => SetField(ref _joursRestants, value);
+    }
+
     // Liee a Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
@@ -73,6 +83,9 @@ public class CalculateurViewModel : BaseViewModel
             // Affiche un message d'erreur a la place de l'age.
             Resultat = "Date de naissance invalide";
             Message = "";
+            // Pas de calcul d'anniversaire si la date est invalide.
+            JoursRestants = "";
+
             ResultatVisible = true;
             // On sort sans rien calculer.
             return;
@@ -87,6 +100,16 @@ public class CalculateurViewModel : BaseViewModel
 
         // Si l'age est 18 ou plus : Majeur, sinon : Mineur.
         Message = age >= 18 ? "Majeur" : "Mineur";
+
+        // Date du prochain anniversaire : date de naissance + (age + 1) ans.
+        DateTime prochain = DateNaissance.Date.AddYears(age + 1);
+
+        // Nombre de jours entre aujourd'hui et ce prochain anniversaire.
+        int jours = (prochain - DateTime.Today).Days;
+
+        // Texte affiche a l'ecran.
+        JoursRestants = $"Prochain anniversaire dans {jours} jours";
+
         ResultatVisible = true;
     }
 
@@ -97,6 +120,8 @@ public class CalculateurViewModel : BaseViewModel
         DateNaissance = DateTime.Today.AddYears(-20);
         Resultat = "";
         Message = "";
+        // Remet aussi les jours restants a zero.
+        JoursRestants = "";
         ResultatVisible = false;
     }
 }
