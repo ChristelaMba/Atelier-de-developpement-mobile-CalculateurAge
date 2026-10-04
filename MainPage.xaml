@@ -19,6 +19,10 @@
             <!-- Affiche Majeur ou Mineur, visible en meme temps que le resultat. -->
             <Label Text="{Binding Message}" FontSize="18"
                     IsVisible="{Binding ResultatVisible}"/>
+
+            <!-- Bouton qui remet tous les champs a zero. -->
+            <Button Text="Effacer"
+                    Command="{Binding EffacerCommand}"/>
         </VerticalStackLayout>
     </ScrollView>
 

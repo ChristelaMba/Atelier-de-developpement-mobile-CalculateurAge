@@ -51,11 +51,17 @@ public class CalculateurViewModel : BaseViewModel
     // Liee a Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
+    // Liee au bouton Effacer dans le XAML.
+    public RelayCommand EffacerCommand { get; }
+
     public CalculateurViewModel()
     {
         CalculerCommand = new RelayCommand(
             Calculer,
             () => !string.IsNullOrWhiteSpace(Nom));
+
+        // Cree la commande Effacer : elle appelle la methode Effacer.
+        EffacerCommand = new RelayCommand(Effacer);
     }
 
     // La logique metier : aucun controle d interface ici.
@@ -71,5 +77,15 @@ public class CalculateurViewModel : BaseViewModel
         // Si l'age est 18 ou plus : Majeur, sinon : Mineur.
         Message = age >= 18 ? "Majeur" : "Mineur";
         ResultatVisible = true;
+    }
+
+    // Remet tous les champs a zero : aucun controle d interface ici.
+    private void Effacer()
+    {
+        Nom = "";
+        DateNaissance = DateTime.Today.AddYears(-20);
+        Resultat = "";
+        Message = "";
+        ResultatVisible = false;
     }
 }
