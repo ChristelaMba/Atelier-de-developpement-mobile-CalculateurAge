@@ -67,6 +67,17 @@ public class CalculateurViewModel : BaseViewModel
     // La logique metier : aucun controle d interface ici.
     private void Calculer()
     {
+        // Refuse une date de naissance dans le futur.
+        if (DateNaissance.Date > DateTime.Today)
+        {
+            // Affiche un message d'erreur a la place de l'age.
+            Resultat = "Date de naissance invalide";
+            Message = "";
+            ResultatVisible = true;
+            // On sort sans rien calculer.
+            return;
+        }
+
         int age = DateTime.Today.Year
                   - DateNaissance.Year;
         if (DateNaissance.Date >
