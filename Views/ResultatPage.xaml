@@ -4,7 +4,10 @@
              x:Class="CalculateurAge.Views.ResultatPage"
              Title="ResultatPage">
     <VerticalStackLayout Padding="20" Spacing="16">
-        <Label x:Name="lblMessage" FontSize="22"/>
+        <!-- Les textes viennent du ViewModel, plus de x:Name. -->
+        <Label Text="{Binding Resultat}" FontSize="22"/>
+        <Label Text="{Binding Message}" FontSize="18"/>
+        <Label Text="{Binding JoursRestants}" FontSize="16"/>
         <Button Text="Retour" Clicked="OnRetourClicked"/>
     </VerticalStackLayout>
 </ContentPage>

@@ -46,7 +46,13 @@ public class CalculateurViewModel : BaseViewModel
     public bool ResultatVisible
     {
         get => _resultatVisible;
-        set => SetField(ref _resultatVisible, value);
+        set
+        {
+            // Quand la visibilite change, le bouton Voir le detail
+            // doit verifier s'il peut etre actif.
+            if (SetField(ref _resultatVisible, value))
+                VoirResultatCommand.Rafraichir();
+        }
     }
 
     // Propriete publique : ce que le XAML voit pour le message.
@@ -69,6 +75,9 @@ public class CalculateurViewModel : BaseViewModel
     // Liee au bouton Effacer dans le XAML.
     public RelayCommand EffacerCommand { get; }
 
+    // Liee au bouton Voir le detail dans le XAML.
+    public RelayCommand VoirResultatCommand { get; }
+
     public CalculateurViewModel()
     {
         CalculerCommand = new RelayCommand(
@@ -77,6 +86,11 @@ public class CalculateurViewModel : BaseViewModel
 
         // Cree la commande Effacer : elle appelle la methode Effacer.
         EffacerCommand = new RelayCommand(Effacer);
+
+        // Cree la commande : active seulement quand un resultat est affiche.
+        VoirResultatCommand = new RelayCommand(
+            VoirResultat,
+            () => ResultatVisible);
     }
 
     // La logique metier : aucun controle d interface ici.
@@ -131,5 +145,14 @@ public class CalculateurViewModel : BaseViewModel
         // Remet aussi les jours restants a zero.
         JoursRestants = "";
         ResultatVisible = false;
+    }
+
+    // Ouvre ResultatPage et lui donne CE ViewModel (this) :
+    // le resultat voyage par le ViewModel, pas par l'URL.
+    private async void VoirResultat()
+    {
+        await Shell.Current.GoToAsync(
+            nameof(CalculateurAge.Views.ResultatPage),
+            new Dictionary<string, object> { ["donnees"] = this });
     }
 }

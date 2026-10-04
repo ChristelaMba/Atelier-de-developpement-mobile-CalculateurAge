@@ -28,6 +28,10 @@
             <Button Text="Effacer"
                     Command="{Binding EffacerCommand}"/>
 
+            <!-- Ouvre la seconde page avec le resultat. -->
+            <Button Text="Voir le detail"
+                    Command="{Binding VoirResultatCommand}"/>
+
             <!-- Titre de la liste des calculs. -->
             <Label Text="Historique" FontSize="18" FontAttributes="Bold"/>
 
