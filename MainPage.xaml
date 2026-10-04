@@ -6,7 +6,14 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="12">
-            <Label Text="Nom"/>
+            <Label Text="Nom" FontSize="16"/>
+            <Entry x:Name="entryNom" Placeholder="Votre nom"/>
+            <Label Text="Date de Naissance" FontSize="16"/>
+            <DatePicker x:Name="pickerDate"/>
+            <Button x:Name="btnCalculer" Text="Calculer"
+                    Clicked="OnCalculerClicked"/>
+            <Label x:Name="lblResultat" FontSize="20"
+                   IsVisible="False"/>
         </VerticalStackLayout>
     </ScrollView>
 
