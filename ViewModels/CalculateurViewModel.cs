@@ -1,4 +1,6 @@
-﻿namespace CalculateurAge.ViewModels;
+﻿using System.Collections.ObjectModel;
+
+namespace CalculateurAge.ViewModels;
 
 // Contient l ETAT de l ecran et les ACTIONS possibles.
 public class CalculateurViewModel : BaseViewModel
@@ -14,6 +16,9 @@ public class CalculateurViewModel : BaseViewModel
 
     // Champ prive : la vraie donnee des jours restants.
     private string _joursRestants = "";
+
+    // Liste des calculs deja faits
+    public ObservableCollection<string> Historique { get; } = new();
 
     // Proprietes publiques : ce que le XAML voit.
     public string Nom
@@ -109,6 +114,9 @@ public class CalculateurViewModel : BaseViewModel
 
         // Texte affiche a l'ecran.
         JoursRestants = $"Prochain anniversaire dans {jours} jours";
+
+        // Ajoute ce calcul en haut de l'historique (0 = premiere place).
+        Historique.Insert(0, Resultat);
 
         ResultatVisible = true;
     }

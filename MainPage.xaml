@@ -27,6 +27,18 @@
             <!-- Bouton qui remet tous les champs a zero. -->
             <Button Text="Effacer"
                     Command="{Binding EffacerCommand}"/>
+
+            <!-- Titre de la liste des calculs. -->
+            <Label Text="Historique" FontSize="18" FontAttributes="Bold"/>
+
+            <!-- Affiche chaque element de la liste Historique, un Label par ligne. -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Historique}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" FontSize="14"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 
