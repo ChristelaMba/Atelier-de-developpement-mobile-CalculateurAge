@@ -56,7 +56,7 @@
                                         BackgroundColor="Transparent"/>
                         </Border>
 
-                        <Button Text="Calculer →"
+                        <Button Text="Calculer"
                                 Command="{Binding CalculerCommand}"
                                 Style="{StaticResource BoutonPrincipal}"
                                 Margin="0,10,0,0"/>

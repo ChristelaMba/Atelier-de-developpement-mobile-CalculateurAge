@@ -140,7 +140,7 @@ public class CalculateurViewModel : BaseViewModel
             Resultat = "Date de naissance invalide";
             Message = "";
             JoursRestants = "";
-            AgeAnnees = "—";
+            AgeAnnees = "-";
             AgeDetail = "Date de naissance invalide";
             NeLe = "";
             TotalJours = "";
