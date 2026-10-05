@@ -2,48 +2,150 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CalculateurAge.MainPage"
-             Title="Calculateur">
+             Title="Calculateur"
+             BackgroundColor="#F7FAFA"
+             Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
-            <Label Text="Nom" FontSize="16"/>
-            <Entry Text="{Binding Nom, Mode=TwoWay}"
-               Placeholder="Votre nom"/>
-            <Label Text="Date de naissance" FontSize="16"/>
-            <DatePicker Date="{Binding DateNaissance}"/>
-            <Button Text="Calculer"
-                Command="{Binding CalculerCommand}"/>
-            <Label Text="{Binding Resultat}" FontSize="20"
-               IsVisible="{Binding ResultatVisible}"/>
+    <Grid>
 
-            <!-- Affiche Majeur ou Mineur, visible en meme temps que le resultat. -->
-            <Label Text="{Binding Message}" FontSize="18"
-                    IsVisible="{Binding ResultatVisible}"/>
+        <!-- formes du bas -->
+        <Ellipse Fill="{StaticResource Deco1Brush}" Opacity="0.9"
+                 WidthRequest="260" HeightRequest="190"
+                 HorizontalOptions="Start" VerticalOptions="End"
+                 TranslationX="-110" TranslationY="90"/>
+        <Ellipse Fill="{StaticResource Deco2Brush}" Opacity="0.9"
+                 WidthRequest="240" HeightRequest="200"
+                 HorizontalOptions="End" VerticalOptions="End"
+                 TranslationX="110" TranslationY="100"/>
 
-            <!-- Affiche les jours restants avant le prochain anniversaire. -->
-            <Label Text="{Binding JoursRestants}" FontSize="16"
-                    IsVisible="{Binding ResultatVisible}"/>
+        <ScrollView>
+            <VerticalStackLayout Padding="20,24,20,32" Spacing="14">
 
-            <!-- Bouton qui remet tous les champs a zero. -->
-            <Button Text="Effacer"
-                    Command="{Binding EffacerCommand}"/>
+                <!-- titre -->
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Calculateur d'âge" FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TexteFort}"/>
+                    <Label Text="Découvrez votre âge exact en quelques secondes."
+                           FontSize="14"
+                           TextColor="{StaticResource TexteDoux}"/>
+                </VerticalStackLayout>
 
-            <!-- Ouvre la seconde page avec le resultat. -->
-            <Button Text="Voir le detail"
-                    Command="{Binding VoirResultatCommand}"/>
+                <!-- formulaire -->
+                <Border Style="{StaticResource Carte}">
+                    <VerticalStackLayout Spacing="8">
 
-            <!-- Titre de la liste des calculs. -->
-            <Label Text="Historique" FontSize="18" FontAttributes="Bold"/>
+                        <Label Text="Nom" Style="{StaticResource Etiquette}"/>
+                        <Border Style="{StaticResource Champ}">
+                            <Entry Text="{Binding Nom, Mode=TwoWay}"
+                                   Placeholder="Votre nom"
+                                   PlaceholderColor="#9CA3AF"
+                                   TextColor="{StaticResource TexteFort}"
+                                   FontSize="16" MinimumHeightRequest="48"
+                                   BackgroundColor="Transparent"/>
+                        </Border>
 
-            <!-- Affiche chaque element de la liste Historique, un Label par ligne. -->
-            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Historique}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding .}" FontSize="14"/>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
+                        <Label Text="Date de naissance"
+                               Style="{StaticResource Etiquette}"
+                               Margin="0,6,0,0"/>
+                        <Border Style="{StaticResource Champ}">
+                            <DatePicker Date="{Binding DateNaissance}"
+                                        Format="dd/MM/yyyy"
+                                        TextColor="{StaticResource TexteFort}"
+                                        FontSize="16" MinimumHeightRequest="48"
+                                        BackgroundColor="Transparent"/>
+                        </Border>
+
+                        <Button Text="Calculer →"
+                                Command="{Binding CalculerCommand}"
+                                Style="{StaticResource BoutonPrincipal}"
+                                Margin="0,10,0,0"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0" Text="Effacer"
+                                    Command="{Binding EffacerCommand}"
+                                    Style="{StaticResource BoutonEffacer}"/>
+                            <Button Grid.Column="1" Text="Voir le détail"
+                                    Command="{Binding VoirResultatCommand}"
+                                    Style="{StaticResource BoutonSecondaire}"/>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- résultat : âge, majeur ou mineur, prochain anniversaire -->
+                <Border Style="{StaticResource Carte}"
+                        BackgroundColor="{StaticResource Teal100}"
+                        Stroke="{StaticResource Teal200Brush}"
+                        Padding="20"
+                        IsVisible="{Binding ResultatVisible}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Votre âge" FontSize="13"
+                               TextColor="{StaticResource TexteDoux}"/>
+                        <Label Text="{Binding AgeAnnees}" FontSize="48"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Teal900}"/>
+                        <BoxView HeightRequest="1"
+                                 Color="{StaticResource Teal200}"
+                                 Margin="0,8"/>
+                        <Border BackgroundColor="{StaticResource VertClair}"
+                                Stroke="Transparent" Padding="12,4"
+                                HorizontalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14"/>
+                            </Border.StrokeShape>
+                            <Label Text="{Binding Message}" FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource VertTexte}"/>
+                        </Border>
+                        <Label Text="{Binding JoursRestants}" FontSize="15"
+                               TextColor="{StaticResource TexteFort}"
+                               Margin="0,6,0,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- historique -->
+                <Label Text="Historique"
+                       Style="{StaticResource TitreSection}"
+                       Margin="0,6,0,0"/>
+
+                <VerticalStackLayout Spacing="8"
+                        BindableLayout.ItemsSource="{Binding Historique}">
+
+                    <!-- état vide -->
+                    <BindableLayout.EmptyView>
+                        <Border Stroke="{StaticResource Teal200Brush}"
+                                StrokeThickness="1.5"
+                                StrokeDashArray="4,4" Padding="16"
+                                BackgroundColor="White">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14"/>
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Aucun calcul effectué pour le moment."
+                                       FontSize="14"
+                                       TextColor="{StaticResource TexteFort}"/>
+                                <Label Text="Vos calculs récents apparaîtront ici."
+                                       FontSize="13"
+                                       TextColor="{StaticResource TexteDoux}"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </BindableLayout.EmptyView>
+
+                    <!-- une carte par calcul -->
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource CartePetite}">
+                                <Label Text="{Binding .}" FontSize="15"
+                                       TextColor="{StaticResource TexteFort}"/>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+
+                </VerticalStackLayout>
+
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
 
+    </Grid>
 </ContentPage>

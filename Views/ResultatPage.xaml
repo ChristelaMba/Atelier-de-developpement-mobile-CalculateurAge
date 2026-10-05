@@ -2,12 +2,96 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CalculateurAge.Views.ResultatPage"
-             Title="ResultatPage">
-    <VerticalStackLayout Padding="20" Spacing="16">
-        <!-- Les textes viennent du ViewModel, plus de x:Name. -->
-        <Label Text="{Binding Resultat}" FontSize="22"/>
-        <Label Text="{Binding Message}" FontSize="18"/>
-        <Label Text="{Binding JoursRestants}" FontSize="16"/>
-        <Button Text="Retour" Clicked="OnRetourClicked"/>
-    </VerticalStackLayout>
+             Title="Détail"
+             BackgroundColor="#F7FAFA"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+
+        <!-- formes du bas -->
+        <Ellipse Fill="{StaticResource Deco1Brush}" Opacity="0.9"
+                 WidthRequest="260" HeightRequest="190"
+                 HorizontalOptions="Start" VerticalOptions="End"
+                 TranslationX="-110" TranslationY="90"/>
+        <Ellipse Fill="{StaticResource Deco2Brush}" Opacity="0.9"
+                 WidthRequest="240" HeightRequest="200"
+                 HorizontalOptions="End" VerticalOptions="End"
+                 TranslationX="110" TranslationY="100"/>
+
+        <ScrollView>
+            <VerticalStackLayout Padding="20,28,20,32" Spacing="18">
+
+                <!-- titre et phrase du résultat -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Détail du calcul" FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TexteFort}"/>
+                    <Label Text="{Binding Resultat}" FontSize="15"
+                           TextColor="{StaticResource TexteDoux}"/>
+                </VerticalStackLayout>
+
+                <!-- âge exact -->
+                <Border Style="{StaticResource Carte}" Padding="22">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Âge exact" FontSize="13"
+                               TextColor="{StaticResource TexteDoux}"/>
+                        <Label Text="{Binding AgeAnnees}" FontSize="40"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Teal900}"/>
+                        <Label Text="{Binding AgeDetail}" FontSize="17"
+                               TextColor="{StaticResource TexteFort}"/>
+                        <Label Text="{Binding NeLe}" FontSize="14"
+                               TextColor="{StaticResource TexteDoux}"
+                               Margin="0,6,0,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- jour de naissance et jours vécus, côte à côte -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="14">
+                    <Border Grid.Column="0"
+                            Style="{StaticResource Carte}" Padding="18">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Né(e) un" FontSize="13"
+                                   TextColor="{StaticResource TexteDoux}"/>
+                            <Label Text="{Binding JourNaissance}"
+                                   FontSize="20" FontAttributes="Bold"
+                                   TextColor="{StaticResource TexteFort}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1"
+                            Style="{StaticResource Carte}" Padding="18">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Jours vécus" FontSize="13"
+                                   TextColor="{StaticResource TexteDoux}"/>
+                            <Label Text="{Binding TotalJours}"
+                                   FontSize="18" FontAttributes="Bold"
+                                   TextColor="{StaticResource TexteFort}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- prochain anniversaire -->
+                <Border Style="{StaticResource Carte}" Padding="22"
+                        BackgroundColor="{StaticResource Teal100}"
+                        Stroke="{StaticResource Teal200Brush}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Prochain anniversaire" FontSize="13"
+                               TextColor="{StaticResource TexteDoux}"/>
+                        <Label Text="{Binding ProchainAnniv}" FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Teal900}"/>
+                        <Label Text="{Binding JoursRestants}" FontSize="15"
+                               TextColor="{StaticResource TexteFort}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- retour -->
+                <Button Text="Retour" Clicked="OnRetourClicked"
+                        Style="{StaticResource BoutonPrincipal}"
+                        Margin="0,6,0,0"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
 </ContentPage>
