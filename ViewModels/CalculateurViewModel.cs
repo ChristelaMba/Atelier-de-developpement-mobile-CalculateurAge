@@ -1,33 +1,30 @@
 ﻿// pour ObservableCollection
 using System.Collections.ObjectModel;
-// pour les dates et nombres en français
+// pour les dates en français
 using System.Globalization;
 
 namespace CalculateurAge.ViewModels;
 
-// Contient l ETAT de l ecran et les ACTIONS possibles.
 public class CalculateurViewModel : BaseViewModel
 {
-    // culture française
     private static readonly CultureInfo fr = CultureInfo.GetCultureInfo("fr-FR");
 
-    // Champs prives : la vraie donnee.
+    // champs prives
     private string _nom = "";
     private DateTime _dateNaissance = DateTime.Today.AddYears(-20);
     private string _resultat = "";
     private bool _resultatVisible;
+    private bool _erreurVisible;
     private string _message = "";
     private string _joursRestants = "";
     private string _ageAnnees = "";
     private string _ageDetail = "";
     private string _neLe = "";
-
-    // champs de la page détail
     private string _totalJours = "";
     private string _jourNaissance = "";
     private string _prochainAnniv = "";
 
-    // Proprietes publiques : ce que le XAML voit.
+    // proprietes publiques
     public string Nom
     {
         get => _nom;
@@ -41,7 +38,17 @@ public class CalculateurViewModel : BaseViewModel
     public DateTime DateNaissance
     {
         get => _dateNaissance;
-        set => SetField(ref _dateNaissance, value);
+        set
+        {
+            if (SetField(ref _dateNaissance, value))
+            {
+                // date future : on montre l'erreur et on cache le resultat
+                bool futur = value.Date > DateTime.Today;
+                ErreurVisible = futur;
+                if (futur) ResultatVisible = false;
+                CalculerCommand.Rafraichir();
+            }
+        }
     }
 
     public string Resultat
@@ -55,10 +62,16 @@ public class CalculateurViewModel : BaseViewModel
         get => _resultatVisible;
         set
         {
-            // le bouton Voir le détail dépend de ce champ
+            // le bouton Voir le detail depend de ce champ
             if (SetField(ref _resultatVisible, value))
                 VoirResultatCommand.Rafraichir();
         }
+    }
+
+    public bool ErreurVisible
+    {
+        get => _erreurVisible;
+        set => SetField(ref _erreurVisible, value);
     }
 
     public string Message
@@ -112,43 +125,32 @@ public class CalculateurViewModel : BaseViewModel
     // liste des calculs deja faits
     public ObservableCollection<string> Historique { get; } = new();
 
-    // Liee a Button.Command dans le XAML.
+    // commandes liees aux boutons
     public RelayCommand CalculerCommand { get; }
     public RelayCommand EffacerCommand { get; }
     public RelayCommand VoirResultatCommand { get; }
 
     public CalculateurViewModel()
     {
+        // actif si le nom est rempli et la date pas dans le futur
         CalculerCommand = new RelayCommand(
             Calculer,
-            () => !string.IsNullOrWhiteSpace(Nom));
+            () => !string.IsNullOrWhiteSpace(Nom)
+                  && DateNaissance.Date <= DateTime.Today);
 
         EffacerCommand = new RelayCommand(Effacer);
 
-        // actif seulement quand un résultat est affiché
+        // actif seulement quand un resultat est affiche
         VoirResultatCommand = new RelayCommand(
             VoirResultat,
             () => ResultatVisible);
     }
 
-    // La logique metier : aucun controle d interface ici.
+    // la logique metier : aucun controle d'interface ici
     private void Calculer()
     {
-        // date dans le futur : on refuse
-        if (DateNaissance.Date > DateTime.Today)
-        {
-            Resultat = "Date de naissance invalide";
-            Message = "";
-            JoursRestants = "";
-            AgeAnnees = "-";
-            AgeDetail = "Date de naissance invalide";
-            NeLe = "";
-            TotalJours = "";
-            JourNaissance = "";
-            ProchainAnniv = "";
-            ResultatVisible = true;
-            return;
-        }
+        // securite : pas de calcul si la date est dans le futur
+        if (DateNaissance.Date > DateTime.Today) return;
 
         int age = DateTime.Today.Year
                   - DateNaissance.Year;
@@ -159,6 +161,7 @@ public class CalculateurViewModel : BaseViewModel
 
         // majeur ou mineur
         Message = age >= 18 ? "Majeur" : "Mineur";
+        ErreurVisible = false;
         ResultatVisible = true;
 
         // prochain anniversaire
@@ -177,7 +180,7 @@ public class CalculateurViewModel : BaseViewModel
         AgeDetail = $"{moisEcoules} mois et {joursEcoules} jours";
         NeLe = "Né(e) le " + DateNaissance.ToString("d MMMM yyyy", fr);
 
-        // jours vécus et jour de naissance
+        // jours vecus et jour de naissance
         int totalJours = (DateTime.Today - DateNaissance.Date).Days;
         TotalJours = totalJours.ToString("N0", fr) + " jours";
         JourNaissance = fr.TextInfo.ToTitleCase(DateNaissance.ToString("dddd", fr));
@@ -190,7 +193,7 @@ public class CalculateurViewModel : BaseViewModel
         Historique.Insert(0, Resultat);
     }
 
-    // Remet tous les champs a zero.
+    // remet tout a zero
     private void Effacer()
     {
         Nom = "";
@@ -204,10 +207,11 @@ public class CalculateurViewModel : BaseViewModel
         TotalJours = "";
         JourNaissance = "";
         ProchainAnniv = "";
+        ErreurVisible = false;
         ResultatVisible = false;
     }
 
-    // Ouvre ResultatPage et lui donne CE ViewModel (this).
+    // ouvre ResultatPage et lui donne ce ViewModel
     private async void VoirResultat()
     {
         await Shell.Current.GoToAsync(

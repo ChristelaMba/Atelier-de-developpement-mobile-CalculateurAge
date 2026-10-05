@@ -73,7 +73,38 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- résultat : âge, majeur ou mineur, prochain anniversaire -->
+                <!-- erreur : date dans le futur -->
+                <Border Style="{StaticResource Carte}"
+                        BackgroundColor="#FDF0EE"
+                        Stroke="#E87868"
+                        Padding="16"
+                        IsVisible="{Binding ErreurVisible}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                BackgroundColor="#E87868"
+                                Stroke="Transparent"
+                                WidthRequest="32" HeightRequest="32"
+                                VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16"/>
+                            </Border.StrokeShape>
+                            <Label Text="!" TextColor="White" FontSize="18"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Date invalide" FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource CorailTexte}"/>
+                            <Label Text="Cette date n'est pas encore arrivée. Choisissez une date passée."
+                                   FontSize="14"
+                                   TextColor="{StaticResource TexteFort}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- resultat : age, majeur ou mineur, prochain anniversaire -->
                 <Border Style="{StaticResource Carte}"
                         BackgroundColor="{StaticResource Teal100}"
                         Stroke="{StaticResource Teal200Brush}"
@@ -112,7 +143,7 @@
                 <VerticalStackLayout Spacing="8"
                         BindableLayout.ItemsSource="{Binding Historique}">
 
-                    <!-- état vide -->
+                    <!-- etat vide -->
                     <BindableLayout.EmptyView>
                         <Border Stroke="{StaticResource Teal200Brush}"
                                 StrokeThickness="1.5"
